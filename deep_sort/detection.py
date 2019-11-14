@@ -8,6 +8,7 @@ class Detection(object):
 
     Parameters
     ----------
+    class_index: detection class index
     tlwh : array_like
         Bounding box in format `(x, y, w, h)`.
     confidence : float
@@ -26,7 +27,9 @@ class Detection(object):
 
     """
 
-    def __init__(self, tlwh, confidence, feature):
+    def __init__(self, class_index, class_name, tlwh, confidence, feature):
+        self.class_index = class_index
+        self.class_name = class_name
         self.tlwh = np.asarray(tlwh, dtype=np.float)
         self.confidence = float(confidence)
         self.feature = np.asarray(feature, dtype=np.float32)
@@ -45,5 +48,5 @@ class Detection(object):
         """
         ret = self.tlwh.copy()
         ret[:2] += ret[2:] / 2
-        ret[2] /= ret[3]
+        ret[2] = 0 if ret[3] == 0 else ret[2] / ret[3]
         return ret

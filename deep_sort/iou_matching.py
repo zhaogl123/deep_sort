@@ -36,8 +36,8 @@ def iou(bbox, candidates):
     area_intersection = wh.prod(axis=1)
     area_bbox = bbox[2:].prod()
     area_candidates = candidates[:, 2:].prod(axis=1)
-    return area_intersection / (area_bbox + area_candidates - area_intersection)
-
+    return np.divide(area_intersection, area_bbox + area_candidates - area_intersection,
+                     out=np.zeros_like(area_intersection), where=(area_bbox + area_candidates - area_intersection) != 0)
 
 def iou_cost(tracks, detections, track_indices=None,
              detection_indices=None):
